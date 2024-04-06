@@ -28,12 +28,25 @@ const client = new Client({
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-
 client.on("ready", (message) => {
   console.log("bot is ready!");
 });
 
-client.on("messageCreate", async (message) => {
-  console.log("author", message.author.displayName);
-  console.log("message", message.content); // Log the message content to see if it's working
-});
+type Cb = (params: { displayName: string; content: string }) => void;
+export function registerOnDiscordMessage(cb: Cb) {
+  client.on("messageCreate", async (message) => {
+    console.log("author id", message.author.id);
+
+    if (message.author.id === process.env.DISCORD_BOT_ID) {
+      console.log("skipping message from bot");
+      return;
+    }
+
+    console.log("author", message.author.displayName);
+    console.log("message", message.content); // Log the message content to see if it's working
+    cb({
+      displayName: message.author.username,
+      content: message.content,
+    });
+  });
+}
