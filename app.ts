@@ -49,4 +49,6 @@ app.get("/health", (c) => {
   });
 });
 
+console.log("server is ready");
+
 export default app;
