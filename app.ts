@@ -25,4 +25,28 @@ app.post("/webhook", async (c) => {
   });
 });
 
+app.get("/health", (c) => {
+  const isDiscordWebhookUrlSet = !!process.env.DISCORD_WEBHOOK_URL;
+  const isDiscordBotTokenSet = !!process.env.DISCORD_BOT_TOKEN;
+  const isDiscordBotIdSet = !!process.env.DISCORD_BOT_ID;
+  const isLineChannelAccessTokenSet = !!process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  const isLineGroupIdSet = !!process.env.LINE_GROUP_ID;
+
+  const isAllSet =
+    isDiscordWebhookUrlSet &&
+    isDiscordBotTokenSet &&
+    isDiscordBotIdSet &&
+    isLineChannelAccessTokenSet &&
+    isLineGroupIdSet;
+
+  return c.json({
+    status: isAllSet ? "OK" : "NG",
+    isDiscordWebhookUrlSet,
+    isDiscordBotTokenSet,
+    isDiscordBotIdSet,
+    isLineChannelAccessTokenSet,
+    isLineGroupIdSet,
+  });
+});
+
 export default app;
