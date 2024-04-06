@@ -26,6 +26,7 @@ app.post("/webhook", async (c) => {
 });
 
 app.get("/health", (c) => {
+  console.log("/health check");
   const isDiscordWebhookUrlSet = !!process.env.DISCORD_WEBHOOK_URL;
   const isDiscordBotTokenSet = !!process.env.DISCORD_BOT_TOKEN;
   const isDiscordBotIdSet = !!process.env.DISCORD_BOT_ID;
@@ -39,14 +40,18 @@ app.get("/health", (c) => {
     isLineChannelAccessTokenSet &&
     isLineGroupIdSet;
 
-  return c.json({
+  const health = {
     status: isAllSet ? "OK" : "NG",
     isDiscordWebhookUrlSet,
     isDiscordBotTokenSet,
     isDiscordBotIdSet,
     isLineChannelAccessTokenSet,
     isLineGroupIdSet,
-  });
+  };
+
+  console.log(health);
+
+  return c.json(health);
 });
 
 console.log("server is ready");
